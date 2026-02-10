@@ -1,47 +1,968 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matt April</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #0d1117;
-            color: #e6edf3;
-        }
-        .container {
-            text-align: center;
-            padding: 2rem;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        p {
-            color: #8b949e;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-        a {
-            color: #58a6ff;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matt April — Engineer & Physicist</title>
+  <meta name="description" content="Senior Staff Engineer and physicist. Building exceptional software, exploring the cosmos, and everything in between.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-deep: #0d0f14;
+      --bg-surface: #13161d;
+      --bg-raised: #1a1e28;
+      --text-primary: #e8e4df;
+      --text-secondary: #9a958e;
+      --text-dim: #5e5a54;
+      --accent: #c8956c;
+      --accent-glow: #c8956c33;
+      --accent-bright: #e0ad82;
+      --accent-alt: #6c9ec8;
+      --timeline-line: #2a2e38;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Outfit', -apple-system, sans-serif;
+      --max-width: 860px;
+      --section-gap: clamp(80px, 12vh, 140px);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 400;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.7;
+      font-size: 17px;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--bg-deep);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    a:hover { color: var(--accent-bright); }
+
+    /* Starfield canvas */
+    #starfield {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.45;
+    }
+
+    /* Subtle noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 2;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 clamp(24px, 5vw, 48px);
+    }
+
+    section {
+      padding: var(--section-gap) 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 20px 0;
+      transition: background 0.4s ease, padding 0.4s ease;
+    }
+
+    nav.scrolled {
+      background: #0d0f14dd;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 14px 0;
+      border-bottom: 1px solid #ffffff08;
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--text-primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-links .icon-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links .icon-link svg {
+      width: 20px; height: 20px;
+      fill: var(--text-secondary);
+      transition: fill 0.25s ease;
+    }
+
+    .nav-links .icon-link:hover svg { fill: var(--text-primary); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+    }
+
+    .hero-content { width: 100%; }
+
+    .hero-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 1.15;
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-description {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      max-width: 560px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+
+    .hero-cta {
+      margin-top: 40px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 0.9s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg-deep);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-bright);
+      color: var(--bg-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--timeline-line);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.2s forwards;
+    }
+
+    .scroll-indicator span {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--text-dim), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 540px;
+      line-height: 1.75;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .about-card {
+      background: var(--bg-surface);
+      border: 1px solid #ffffff06;
+      border-radius: 12px;
+      padding: 32px;
+      transition: transform 0.35s ease, border-color 0.35s ease;
+    }
+
+    .about-card:hover {
+      transform: translateY(-3px);
+      border-color: #ffffff0f;
+    }
+
+    .about-card .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      display: block;
+      color: var(--accent);
+      font-family: var(--font-body);
+      font-weight: 300;
+    }
+
+    .about-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+    }
+
+    .about-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      margin-top: 52px;
+      position: relative;
+      padding-left: 36px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--timeline-line) 30%, var(--timeline-line) 70%, transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 48px;
+    }
+
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 10px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--bg-deep);
+      border: 2px solid var(--accent);
+      z-index: 1;
+      transition: background 0.3s ease;
+    }
+
+    .timeline-item:hover::before { background: var(--accent); }
+
+    .timeline-era {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .timeline-item h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .timeline-item p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .timeline-tags {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 5px 12px;
+      border-radius: 100px;
+      background: var(--bg-raised);
+      color: var(--text-secondary);
+      border: 1px solid #ffffff08;
+    }
+
+    /* ── RESEARCH ── */
+    .research-highlight {
+      margin-top: 48px;
+      background: var(--bg-surface);
+      border: 1px solid #ffffff06;
+      border-radius: 12px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .research-highlight::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(to right, var(--accent), var(--accent-alt), transparent);
+    }
+
+    .research-highlight h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 14px;
+    }
+
+    .research-highlight p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+
+    .research-highlight p:last-of-type { margin-bottom: 0; }
+
+    .research-repos {
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .repo-card {
+      background: var(--bg-raised);
+      border: 1px solid #ffffff08;
+      border-radius: 10px;
+      padding: 24px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .repo-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-alt);
+    }
+
+    .repo-card h4 {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: var(--accent-alt);
+    }
+
+    .repo-card p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--bg-surface);
+      border: 1px solid #ffffff06;
+      border-radius: 12px;
+      padding: 36px;
+      transition: transform 0.35s ease, border-color 0.35s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: #ffffff12;
+    }
+
+    .project-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex-grow: 1;
+    }
+
+    .project-link {
+      margin-top: 18px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .project-link .arrow {
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+
+    .project-card:hover .project-link .arrow {
+      transform: translateX(4px);
+    }
+
+    /* ── PERSONAL ── */
+    .interests-list {
+      margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .interest-pill {
+      padding: 10px 22px;
+      border-radius: 100px;
+      background: var(--bg-surface);
+      border: 1px solid #ffffff08;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      transition: border-color 0.3s ease, color 0.3s ease;
+      cursor: default;
+    }
+
+    .interest-pill:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+    }
+
+    .personal-note {
+      margin-top: 36px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid #ffffff08;
+      padding: 48px 0;
+      margin-top: var(--section-gap);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--text-dim);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links a {
+      color: var(--text-dim);
+      transition: color 0.25s ease;
+      display: flex;
+    }
+
+    .footer-links a:hover { color: var(--text-primary); }
+
+    .footer-links svg {
+      width: 20px; height: 20px;
+      fill: currentColor;
+    }
+
+    /* ── ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .about-grid,
+      .research-repos,
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links a:not(.icon-link) { display: none; }
+      .nav-links { gap: 16px; }
+
+      .hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
+
+      .timeline { padding-left: 28px; }
+      .timeline-item::before { left: -28px; }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .scroll-indicator { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Matt April</h1>
-        <p>Welcome to my site.</p>
-        <a href="https://github.com/matt-april">GitHub</a>
-    </div>
+  <canvas id="starfield"></canvas>
+
+  <div class="page-wrapper">
+    <!-- NAV -->
+    <nav id="nav">
+      <div class="container">
+        <div class="nav-name">Matt April</div>
+        <div class="nav-links">
+          <a href="#about">About</a>
+          <a href="#journey">Journey</a>
+          <a href="#research">Research</a>
+          <a href="#projects">Projects</a>
+          <a href="https://github.com/matt-april" target="_blank" rel="noopener" class="icon-link" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-label">Engineer &middot; Physicist &middot; Builder</div>
+        <h1>I build software<br>and study <em>the cosmos.</em></h1>
+        <p class="hero-description">
+          Senior Staff Engineer by day, physicist by training, relentless learner always. I operate across the full stack with the same rigor I brought to cosmology research &mdash; precise, thoughtful, and never satisfied with "good enough."
+        </p>
+        <div class="hero-cta">
+          <a href="#journey" class="btn btn-primary">See My Journey</a>
+          <a href="#projects" class="btn btn-ghost">View Projects</a>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">About</div>
+          <h2 class="section-title">Physics degree, principal-level engineering, and everything in between.</h2>
+          <p class="section-subtitle">I've spent my career moving between worlds that don't usually overlap &mdash; and finding that the patterns are more alike than you'd think.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-card reveal reveal-delay-1">
+            <span class="card-icon">&Sigma;</span>
+            <h3>Physics &amp; Math</h3>
+            <p>B.S. in Physics and Mathematics with a perfect 4.0 GPA. Top of my class. Later pursued graduate work in cosmology, studying galaxy clusters and publishing peer-reviewed research.</p>
+          </div>
+          <div class="about-card reveal reveal-delay-2">
+            <span class="card-icon">&gt;_</span>
+            <h3>Full Stack Engineering</h3>
+            <p>Over a decade shipping production software. From .NET and Angular to Python and PostgreSQL &mdash; I've mastered every layer of the stack and set the engineering standard wherever I land.</p>
+          </div>
+          <div class="about-card reveal reveal-delay-1">
+            <span class="card-icon">&loz;</span>
+            <h3>Technical Leadership</h3>
+            <p>Recognized as the top engineer by the CEO. I set code quality standards, shape engineering culture, and make product-minded decisions that move the business forward.</p>
+          </div>
+          <div class="about-card reveal reveal-delay-2">
+            <span class="card-icon">&oplus;</span>
+            <h3>Open Source</h3>
+            <p>Led multiple open source repositories for the Rubin Observatory LSST DESC collaboration, building tools used by researchers worldwide to study the dark universe.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section id="journey">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Journey</div>
+          <h2 class="section-title">Not a resume. A trajectory.</h2>
+          <p class="section-subtitle">Every chapter sharpened a different edge. Here's how it unfolded.</p>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <div class="timeline-era">Foundation</div>
+            <h3>B.S. in Physics &amp; Mathematics</h3>
+            <p>Graduated at the top of my class with a perfect 4.0 GPA. Built a deep foundation in mathematical reasoning, computational methods, and the kind of disciplined thinking that carries into everything I do.</p>
+            <div class="timeline-tags">
+              <span class="tag">Physics</span>
+              <span class="tag">Mathematics</span>
+              <span class="tag">4.0 GPA</span>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal">
+            <div class="timeline-era">5 Years &middot; Startup</div>
+            <h3>Senior / Principal Engineer</h3>
+            <p>Mastered the entire stack at a software startup &mdash; .NET, C#, JavaScript, AngularJS, SQL. Became the person everyone came to. Operated as the de facto principal engineer, the go-to for architecture decisions and hard problems.</p>
+            <div class="timeline-tags">
+              <span class="tag">.NET / C#</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">AngularJS</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Full Stack</span>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal">
+            <div class="timeline-era">Graduate Research</div>
+            <h3>Physics M.S. &middot; Cosmology</h3>
+            <p>Pivoted into a physics graduate program. Focused on galaxy clusters and cosmological analysis. Published a first-author paper, refactored complex simulation code for high-performance computing, and led open source efforts for the Rubin Observatory LSST DESC.</p>
+            <div class="timeline-tags">
+              <span class="tag">Cosmology</span>
+              <span class="tag">Galaxy Clusters</span>
+              <span class="tag">HPC</span>
+              <span class="tag">Published Research</span>
+              <span class="tag">LSST DESC</span>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal">
+            <div class="timeline-era">Now</div>
+            <h3>Senior Staff Engineer</h3>
+            <p>The technical cornerstone of a new startup. Backend-focused with top-tier expertise in PostgreSQL, C#, and Python. Recognized by the CEO as the top engineer. I shape the product direction, set the standards, and elevate the entire team.</p>
+            <div class="timeline-tags">
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">C#</span>
+              <span class="tag">Python</span>
+              <span class="tag">Architecture</span>
+              <span class="tag">Product Strategy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH -->
+    <section id="research">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Research</div>
+          <h2 class="section-title">Studying the large-scale structure of the universe.</h2>
+          <p class="section-subtitle">My graduate research sat at the intersection of computation and cosmology, building the tools to understand what we can't directly see.</p>
+        </div>
+
+        <div class="research-highlight reveal">
+          <h3>Galaxy Clusters &amp; Cosmological Analysis</h3>
+          <p>Published a first-author paper on galaxy cluster analysis. Developed statistical likelihood pipelines, imaging pipelines, and reusable frameworks for cosmological parameter estimation. Refactored and ran simulation code on high-performance computing clusters.</p>
+          <p>Co-authored multiple additional publications as part of the broader collaboration.</p>
+        </div>
+
+        <div class="research-repos reveal">
+          <div class="repo-card">
+            <h4>Firecrown</h4>
+            <p>Multi-probe cosmological likelihood framework for the LSST DESC. Led development and maintenance of this core analysis tool.</p>
+          </div>
+          <div class="repo-card">
+            <h4>TJPCov</h4>
+            <p>Covariance matrix computation pipeline for two-point correlation functions. Essential infrastructure for survey cosmology.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Projects</div>
+          <h2 class="section-title">Things I'm building.</h2>
+          <p class="section-subtitle">Side projects where I explore ideas, learn new things, and build for the fun of it.</p>
+        </div>
+
+        <div class="projects-grid">
+          <div class="project-card reveal reveal-delay-1">
+            <h3>Vehix</h3>
+            <p>A project born from curiosity and a desire to build something useful. Check out the docs for the full picture.</p>
+            <a href="https://matt-april.github.io/vehix-docs" class="project-link" target="_blank" rel="noopener">
+              View Documentation <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+          <div class="project-card reveal reveal-delay-2">
+            <h3>Pilled</h3>
+            <p>Another personal project exploring a different space entirely. Built for fun, learning, and the joy of shipping something new.</p>
+            <a href="https://matt-april.github.io/pilled-docs" class="project-link" target="_blank" rel="noopener">
+              View Documentation <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERSONAL -->
+    <section id="personal">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Beyond the Code</div>
+          <h2 class="section-title">The rest of the picture.</h2>
+        </div>
+        <div class="interests-list reveal">
+          <span class="interest-pill">Electronics</span>
+          <span class="interest-pill">3D Printing</span>
+          <span class="interest-pill">Woodworking</span>
+          <span class="interest-pill">Music Discovery</span>
+          <span class="interest-pill">Constant Learning</span>
+          <span class="interest-pill">Columbus, OH</span>
+        </div>
+        <p class="personal-note reveal">
+          When I'm not writing code or reading papers, I'm probably elbow-deep in a woodworking project, tuning a 3D print, or discovering some obscure album I'll be obsessed with for the next month. I live in Columbus with my wife, our dog, and our cat. I care about building things that matter, treating people well, and never stopping learning.
+        </p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">Matt April</div>
+        <div class="footer-links">
+          <a href="https://github.com/matt-april" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /* Starfield */
+    (function() {
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      const COUNT = 110;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function init() {
+        resize();
+        stars = [];
+        for (let i = 0; i < COUNT; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.2 + 0.3,
+            dx: (Math.random() - 0.5) * 0.1,
+            dy: (Math.random() - 0.5) * 0.06,
+            opacity: Math.random() * 0.5 + 0.2,
+            pulse: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const time = Date.now() * 0.001;
+        for (const s of stars) {
+          s.x += s.dx;
+          s.y += s.dy;
+          if (s.x < 0) s.x = canvas.width;
+          if (s.x > canvas.width) s.x = 0;
+          if (s.y < 0) s.y = canvas.height;
+          if (s.y > canvas.height) s.y = 0;
+          const flicker = Math.sin(time * 0.8 + s.pulse) * 0.15 + 0.85;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200, 190, 175, ${s.opacity * flicker})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      init();
+      draw();
+    })();
+
+    /* Nav scroll */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    /* Scroll reveal */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
