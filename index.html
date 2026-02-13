@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matt April — Engineer & Physicist</title>
-  <meta name="description" content="Senior Staff Engineer and physicist. Building exceptional software, exploring the cosmos, and everything in between.">
+  <title>Matt April — Software Engineer</title>
+  <meta name="description" content="Senior Staff Engineer. Physics background. I work on backend systems, database architecture, and open source cosmology tools.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -65,7 +65,7 @@
       width: 100%; height: 100%;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.45;
+      opacity: 0.5;
     }
 
     /* Subtle noise overlay */
@@ -747,7 +747,7 @@
         <div class="reveal">
           <div class="section-label">Journey</div>
           <h2 class="section-title">Not a resume. A trajectory.</h2>
-          <p class="section-subtitle">Every chapter sharpened a different edge. Here's how it unfolded.</p>
+          <p class="section-subtitle">The short version.</p>
         </div>
         <div class="timeline">
           <div class="timeline-item reveal">
@@ -809,7 +809,7 @@
         <div class="reveal">
           <div class="section-label">Research</div>
           <h2 class="section-title">Studying the large-scale structure of the universe.</h2>
-          <p class="section-subtitle">My graduate research sat at the intersection of computation and cosmology, building the tools to understand what we can't directly see.</p>
+          <p class="section-subtitle">My graduate research focused on galaxy clusters and the computational tools needed to analyze large-scale cosmological surveys.</p>
         </div>
 
         <div class="research-highlight reveal">
@@ -837,20 +837,20 @@
         <div class="reveal">
           <div class="section-label">Projects</div>
           <h2 class="section-title">Things I'm building.</h2>
-          <p class="section-subtitle">Side projects where I explore ideas, learn new things, and build for the fun of it.</p>
+          <p class="section-subtitle">Side projects. Details in the docs.</p>
         </div>
 
         <div class="projects-grid">
           <div class="project-card reveal reveal-delay-1">
             <h3>Vehix</h3>
-            <p>A project born from curiosity and a desire to build something useful. Check out the docs for the full picture.</p>
+            <p>Documentation has the full picture.</p>
             <a href="https://matt-april.github.io/vehix-docs" class="project-link" target="_blank" rel="noopener">
               View Documentation <span class="arrow">&rarr;</span>
             </a>
           </div>
           <div class="project-card reveal reveal-delay-2">
             <h3>Pilled</h3>
-            <p>Another personal project exploring a different space entirely. Built for fun, learning, and the joy of shipping something new.</p>
+            <p>Documentation has the full picture.</p>
             <a href="https://matt-april.github.io/pilled-docs" class="project-link" target="_blank" rel="noopener">
               View Documentation <span class="arrow">&rarr;</span>
             </a>
@@ -875,7 +875,7 @@
           <span class="interest-pill">Columbus, OH</span>
         </div>
         <p class="personal-note reveal">
-          When I'm not writing code or reading papers, I'm probably elbow-deep in a woodworking project, tuning a 3D print, or discovering some obscure album I'll be obsessed with for the next month. I live in Columbus with my wife, our dog, and our cat. I care about building things that matter, treating people well, and never stopping learning.
+          Outside of work I build things with my hands &mdash; woodworking, electronics, 3D printing. I live in Columbus, OH with my wife, our dog, and our cat.
         </p>
       </div>
     </section>
@@ -899,7 +899,7 @@
       const canvas = document.getElementById('starfield');
       const ctx = canvas.getContext('2d');
       let stars = [];
-      const COUNT = 110;
+      const COUNT = 1100;
 
       function resize() {
         canvas.width = window.innerWidth;
@@ -922,6 +922,22 @@
         }
       }
 
+      function getFill(flicker) {
+        const skyColors = [
+          [70, 130, 180],      // steel blue - deep space
+          [100, 149, 237],     // cornflower blue - cosmic blue
+          [230, 100, 80],      // warm red - distant galaxies
+          [255, 140, 60],      // warm orange - massive structures
+          [200, 100, 150],     // muted purple - exotic objects
+          [120, 180, 200],     // pale cyan - stellar regions
+          [240, 120, 100],     // salmon - varied wavelengths
+          [180, 150, 200],     // lavender - background clusters
+          [255, 180, 120]      // peachy - high-z objects
+        ];
+        const color = skyColors[Math.floor(Math.random() * skyColors.length)];
+        return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${flicker})`;
+      }
+
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const time = Date.now() * 0.001;
@@ -932,10 +948,10 @@
           if (s.x > canvas.width) s.x = 0;
           if (s.y < 0) s.y = canvas.height;
           if (s.y > canvas.height) s.y = 0;
-          const flicker = Math.sin(time * 0.8 + s.pulse) * 0.15 + 0.85;
+          const flicker = Math.sin(time * 0.8 + s.pulse) * 0.45 + 0.85;
           ctx.beginPath();
           ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(200, 190, 175, ${s.opacity * flicker})`;
+          ctx.fillStyle = getFill(flicker);
           ctx.fill();
         }
         requestAnimationFrame(draw);
